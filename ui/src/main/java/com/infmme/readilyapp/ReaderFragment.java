@@ -54,9 +54,9 @@ public class ReaderFragment extends Fragment {
 	private RelativeLayout infoLayout;
 	private TextView wpmTextView;
 	private TextView positionTextView;
-	private TextView currentTextView;
-	private TextView leftTextView;
-	private TextView rightTextView;
+	private ReaderTextView currentTextView;
+/*	private TextView leftTextView;
+	private TextView rightTextView;*/
 	private TextView notification;
 	private ProgressBar progressBar;
 	private ProgressBar parsingProgressBar;
@@ -147,11 +147,11 @@ public class ReaderFragment extends Fragment {
 									 wordList.get(pos).substring(0, emphasisPosition) + "</font>");
 	}
 
-	/**
+/*	*//**
 	 * Generates formatted emphasis character
 	 * @param pos : position in wordList
 	 * @return Spanned object to draw
-	 */
+	 *//*
 	private Spanned getFormattedEmphasis(int pos){
 		if (TextUtils.isEmpty(wordList.get(pos)))
 			return Html.fromHtml("");
@@ -160,12 +160,12 @@ public class ReaderFragment extends Fragment {
 									 wordList.get(pos).substring(emphasisPosition, emphasisPosition + 1) + "</font>");
 	}
 
-	/**
+	*//**
 	 * Generates formatted text after emphasis character
 	 * (part of current word, if exists and next ones, if option is enabled)
 	 * @param pos : position in wordList
 	 * @return Spanned object to draw
-	 */
+	 *//*
 	private Spanned getFormattedRight(int pos){
 		if (TextUtils.isEmpty(wordList.get(pos)))
 			return Html.fromHtml("");
@@ -178,11 +178,11 @@ public class ReaderFragment extends Fragment {
 		return Html.fromHtml(format.toString());
 	}
 
-	/**
+	*//**
 	 * Generates Html formatted String of next words in text (called if 'context' option is enabled)
 	 * @param pos : position in wordList
 	 * @return Html format String
-	 */
+	 *//*
 	private String getNextWordsFormat(int pos){
 		int charLen = 0;
 		int wordListIndex = pos;
@@ -196,7 +196,7 @@ public class ReaderFragment extends Fragment {
 		}
 		format.append("</font>");
 		return format.toString();
-	}
+	}*/
 
 	/**
 	 * Finds all Views in main Fragment ViewGroup
@@ -205,9 +205,9 @@ public class ReaderFragment extends Fragment {
 	private void findViews(ViewGroup v){
 		readerLayout = (RelativeLayout) v.findViewById(R.id.reader_layout);
 		parsingProgressBar = (ProgressBar) v.findViewById(R.id.parsingProgressBar);
-		currentTextView = (TextView) v.findViewById(R.id.currentWordTextView);
-		leftTextView = (TextView) v.findViewById(R.id.leftWordTextView);
-		rightTextView = (TextView) v.findViewById(R.id.rightWordTextView);
+		currentTextView = (ReaderTextView) v.findViewById(R.id.currentWordTextView);
+/*		leftTextView = (TextView) v.findViewById(R.id.leftWordTextView);
+		rightTextView = (TextView) v.findViewById(R.id.rightWordTextView);*/
 		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		notification = (TextView) v.findViewById(R.id.reader_notification);
 		prevButton = (ImageButton) v.findViewById(R.id.previousWordImageButton);
@@ -292,8 +292,10 @@ public class ReaderFragment extends Fragment {
 								 pointerBottom.getPaddingRight(), pointerBottom.getPaddingBottom());
 
 		currentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, settingsBundle.getFontSize());
-		leftTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, settingsBundle.getFontSize());
-		rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, settingsBundle.getFontSize());
+        ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams)currentTextView.getLayoutParams();
+        margins.leftMargin = margins.leftMargin + (int)(fontSizePx * POINTER_LEFT_PADDING_COEFFICIENT + .5f);
+/*		leftTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, settingsBundle.getFontSize());
+		rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, settingsBundle.getFontSize());*/
 	}
 
 	private void setReaderBackground(){
@@ -481,6 +483,8 @@ public class ReaderFragment extends Fragment {
 		parserReceived = true;
 
 		readable = parser.getReadable();
+        currentTextView.setContents(readable);
+        currentTextView.setDisplayContext(settingsBundle.isShowingContextEnabled());
 		wordList = readable.getWordList();
 		emphasisList = readable.getEmphasisList();
 		delayList = readable.getDelayList();
@@ -658,6 +662,8 @@ public class ReaderFragment extends Fragment {
 						playOn(readerLayout);
 				if (!settingsBundle.isSwipesEnabled()){ prevButton.setVisibility(View.VISIBLE); }
 				showNotification(R.string.pause);
+                position = currentTextView.getPos();
+                updateView(position);
 				showInfo(this);
 			}
 		}
@@ -684,9 +690,12 @@ public class ReaderFragment extends Fragment {
 		private void updateView(int pos){
 			if (pos >= wordList.size())
 				return;
-			currentTextView.setText(getFormattedEmphasis(pos));
+/*			currentTextView.setText(getFormattedEmphasis(pos));
 			leftTextView.setText(getFormattedLeft(pos));
-			rightTextView.setText(getFormattedRight(pos));
+			rightTextView.setText(getFormattedRight(pos));*/
+
+            currentTextView.setPos(pos);
+            currentTextView.invalidate();
 			progressBar.setProgress(progress);
 			hideNotification(false);
 		}

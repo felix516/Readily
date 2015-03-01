@@ -88,12 +88,13 @@
                 android:background="@android:color/transparent"
                 android:visibility="gone">
 
-            <TextView
+            <com.infmme.readilyapp.ReaderTextView
                     style="@style/reader_text_main"
                     android:id="@+id/currentWordTextView"
-                    android:layout_alignLeft="@+id/pointerTopImageView"/>
+                    android:layout_width="fill_parent"
+                    android:background="@color/wallet_highlighted_text_holo_dark"/>
 
-            <TextView
+<!--            <TextView
                     style="@style/reader_text_main"
                     android:id="@+id/leftWordTextView"
                     android:layout_alignBaseline="@+id/currentWordTextView"
@@ -103,7 +104,7 @@
                     style="@style/reader_text_main"
                     android:id="@+id/rightWordTextView"
                     android:layout_alignBaseline="@+id/currentWordTextView"
-                    android:layout_toRightOf="@+id/currentWordTextView"/>
+                    android:layout_toRightOf="@+id/currentWordTextView"/>-->
 
             <ImageView
                     style="@style/reader_pointer"

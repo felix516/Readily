@@ -49,9 +49,11 @@ public class SettingsActivity extends PreferenceActivity {
 				getString(Constants.Preferences.WPM, Constants.DEFAULT_WPM));
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
-			ActionBar actionBar = getActionBar();
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setDisplayShowTitleEnabled(true);
+			ActionBar actionBar = this.getActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowTitleEnabled(true);
+            }
 		}
 	}
 
