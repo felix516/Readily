@@ -105,6 +105,10 @@ public class SettingsActivity extends PreferenceActivity {
 			if (key.equals(Constants.Preferences.FONT_SIZE)){
 				chooseFontSize(this);
 			}
+
+            if (key.equals("pref_showContexts")){
+                showContextTextBoxes(this);
+            }
 		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
@@ -322,6 +326,54 @@ public class SettingsActivity extends PreferenceActivity {
 									 pxFromDp(Constants.DIALOG_PICKER_HEIGHT));
 
 	}
+
+    private void showContextTextBoxes(final Context context){
+
+        final Boolean[] results = new Boolean[2];
+        final LinearLayout linearLayout = getDialogLayout(context);
+        final CheckBox prependCheckBox = new CheckBox(context);
+        prependCheckBox.setText("Before");
+        final CheckBox appendCheckBox = new CheckBox(context);
+        appendCheckBox.setText("After");
+        linearLayout.addView(prependCheckBox);
+        linearLayout.addView(appendCheckBox);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.preferences_showContext).
+                setView(linearLayout).
+                    setPositiveButton(android.R.string.ok,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which){
+                                    PreferenceManager.getDefaultSharedPreferences(context)
+                                            .edit()
+                                            .putBoolean(Constants.Preferences.CONTEXT_PREPEND,
+                                                        prependCheckBox.isChecked())
+                                            .commit();
+                                    PreferenceManager.getDefaultSharedPreferences(context)
+                                            .edit()
+                                            .putBoolean(Constants.Preferences.CONTEXT_APPEND,
+                                                        appendCheckBox.isChecked())
+                                            .commit();
+
+
+                                }
+                            }
+                    ).
+                setNegativeButton(android.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+
+                            }
+                        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getWindow().setLayout(pxFromDp(Constants.DIALOG_PICKER_WIDTH),
+                pxFromDp(Constants.DIALOG_PICKER_HEIGHT));
+    }
+
 
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

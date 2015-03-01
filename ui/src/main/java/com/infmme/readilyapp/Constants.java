@@ -47,6 +47,8 @@ public class Constants {
 		public static final String STORAGE = "pref_cache";
 		public static final String WPM = "pref_wpm";
 		public static final String SHOW_CONTEXT = "pref_showContext";
+        public static final String CONTEXT_PREPEND = "pref_prependContext";
+        public static final String CONTEXT_APPEND = "append_Context";
 		public static final String SWIPE = "pref_swipe";
 		public static final String TYPEFACE = "pref_typeface";
 		public static final String PUNCTUATION_DIFFERS = "pref_punct";
@@ -56,5 +58,7 @@ public class Constants {
 		public static final String DARK_THEME = "pref_dark_theme";
 		public static final String[] STR_PUNCTUATION_DEFAULTS =
 				{"10", "15", "20", "18", "20", "18"};
+        public static final Integer[] INT_CONTEXT_DEFAULTS =
+                {1,1};
 	}
 }

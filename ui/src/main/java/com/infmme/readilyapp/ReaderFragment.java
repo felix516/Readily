@@ -134,18 +134,18 @@ public class ReaderFragment extends Fragment {
 		this.localTime = localTime;
 	}
 
-	/**
+/*	*//**
 	 * Generates formatted text before emphasis point
 	 * @param pos : position in wordList
 	 * @return Spanned object to draw
-	 */
+	 *//*
 	private Spanned getFormattedLeft(int pos){
 		if (TextUtils.isEmpty(wordList.get(pos)))
 			return Html.fromHtml("");
 		int emphasisPosition = emphasisList.get(pos);
 		return Html.fromHtml("<font color='" + primaryTextColor + "'>" +
 									 wordList.get(pos).substring(0, emphasisPosition) + "</font>");
-	}
+	}*/
 
 /*	*//**
 	 * Generates formatted emphasis character
@@ -484,7 +484,7 @@ public class ReaderFragment extends Fragment {
 
 		readable = parser.getReadable();
         currentTextView.setContents(readable);
-        currentTextView.setDisplayContext(settingsBundle.isShowingContextEnabled());
+        currentTextView.setDisplayContext(true);
 		wordList = readable.getWordList();
 		emphasisList = readable.getEmphasisList();
 		delayList = readable.getDelayList();

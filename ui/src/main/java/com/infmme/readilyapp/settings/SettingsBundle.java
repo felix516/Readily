@@ -1,10 +1,13 @@
 package com.infmme.readilyapp.settings;
 
 import android.content.SharedPreferences;
+import android.widget.Switch;
+
 import com.infmme.readilyapp.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by infm on 6/26/14. Enjoy ;)
@@ -16,7 +19,8 @@ public class SettingsBundle {
 	private Integer fontSize;
 	private boolean punctuationSpeedDiffers;
 	private List<Integer> delayCoefficients;
-	private boolean showingContextEnabled;
+	//private boolean showingContextEnabled;
+    private Boolean[] showingContexts;
 	private boolean swipesEnabled;
 	private boolean storingComplete;
 	private Integer typeface;
@@ -53,9 +57,14 @@ public class SettingsBundle {
 		this.WPM = WPM;
 	}
 
-	public boolean isShowingContextEnabled(){
+/*	public boolean isShowingContextEnabled(){
 		return showingContextEnabled;
-	}
+	}*/
+
+    public Boolean[] getShowingContexts(){
+        return showingContexts;
+    }
+
 
 	public boolean isSwipesEnabled(){
 		return swipesEnabled;
@@ -67,7 +76,8 @@ public class SettingsBundle {
 				sharedPreferences.getString(Constants.Preferences.FONT_SIZE, Constants.DEFAULT_FONT_SIZE));
 		typeface = Integer.parseInt(sharedPreferences.getString(Constants.Preferences.TYPEFACE, "0"));
 		swipesEnabled = sharedPreferences.getBoolean(Constants.Preferences.SWIPE, false);
-		showingContextEnabled = sharedPreferences.getBoolean(Constants.Preferences.SHOW_CONTEXT, true);
+		//showingContextEnabled = sharedPreferences.getBoolean(Constants.Preferences.SHOW_CONTEXT, true);
+        showingContexts = buildContextList();
 		punctuationSpeedDiffers = sharedPreferences.getBoolean(Constants.Preferences.PUNCTUATION_DIFFERS, true);
 		delayCoefficients = buildDelayListCoefficients();
 		storingComplete = sharedPreferences.getBoolean(Constants.Preferences.STORE_COMPLETE, false);
@@ -81,7 +91,7 @@ public class SettingsBundle {
 		editor.putString(Constants.Preferences.FONT_SIZE, Integer.toString(fontSize));
 		editor.putString(Constants.Preferences.TYPEFACE, Integer.toString(typeface));
 		editor.putBoolean(Constants.Preferences.SWIPE, swipesEnabled);
-		editor.putBoolean(Constants.Preferences.SHOW_CONTEXT, showingContextEnabled);
+		//editor.putBoolean(Constants.Preferences.SHOW_CONTEXT, showingContextEnabled);
 		editor.putBoolean(Constants.Preferences.PUNCTUATION_DIFFERS, punctuationSpeedDiffers);
 		editor.putBoolean(Constants.Preferences.STORE_COMPLETE, storingComplete);
 		editor.putBoolean(Constants.Preferences.DARK_THEME, darkTheme);
@@ -103,4 +113,23 @@ public class SettingsBundle {
 				delayCoeffs.add(Integer.parseInt(Constants.Preferences.STR_PUNCTUATION_DEFAULTS[0]));
 		return delayCoeffs;
 	}
+
+    private Boolean[] buildContextList(){
+
+        Boolean[] returned = new Boolean[2];
+        Set<String> values = sharedPreferences.getStringSet("pref_showContexts",null);
+
+        for (String s : values){
+            switch(s)
+            {
+                case "0":
+                    returned[0] = true;
+                    break;
+                case "1":
+                    returned[1] = true;
+                    break;
+            }
+        }
+        return  returned;
+    }
 }

@@ -27,11 +27,16 @@
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/preferences_advanced">
-        <CheckBoxPreference
+        <Preference
+            android:key="pref_showContexts"
+            android:summary="@string/preferences_showContext_summary"
+            android:title="@string/preferences_showContext"/>
+<!--        <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="pref_showContext"
                 android:summary="@string/preferences_showContext_summary"
-                android:title="@string/preferences_showContext"/>
+                android:title="@string/preferences_showContext"/>-->
+
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="pref_swipe"
