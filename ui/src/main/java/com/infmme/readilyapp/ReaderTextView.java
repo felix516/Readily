@@ -1,7 +1,6 @@
 package com.infmme.readilyapp;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,16 +17,16 @@ import com.infmme.readilyapp.readable.Readable;
 public class ReaderTextView extends TextView {
 
     private static final int EMPHASIS_COLOR = Color.parseColor("#FA2828");
-    private int PrimaryColor = Color.parseColor("#0A0A0A");
-    private int SecondaryColor = Color.parseColor("#AAAAAA");
-    private float padding  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 95, this.getResources().getDisplayMetrics());
+    private int PrimaryColor;
+    private int SecondaryColor;
+    private float padding  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 69, this.getResources().getDisplayMetrics());
     private int pos;
     Readable contents;
-    private Boolean DisplayContext;
+    private Boolean[] DisplayContexts;
 
 
-    public void setDisplayContext(Boolean displayContext) {
-        DisplayContext = displayContext;
+    public void setDisplayContext(Boolean[] displayContext) {
+        DisplayContexts = displayContext;
     }
 
     public void setContents(Readable contents) {
@@ -43,14 +42,12 @@ public class ReaderTextView extends TextView {
         this.pos = pos;
     }
 
-    public void Advance(int amount) {
-        this.pos += amount;
-        this.invalidate();
+    public void setPrimaryColor(String primaryColor) {
+        PrimaryColor = Color.parseColor(primaryColor);
     }
 
-    public void Retreat(int amount ) {
-        this.pos -= amount;
-        this.invalidate();
+    public void setSecondaryColor(String secondaryColor) {
+        SecondaryColor = Color.parseColor(secondaryColor);
     }
 
     public ReaderTextView(Context context) {
@@ -65,13 +62,15 @@ public class ReaderTextView extends TextView {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * Draws the text to be displayed by the reader based on current position
+     * @param canvas the canvas to draw on
+     */
     @Override
     protected void onDraw(Canvas canvas) {
 
 
 
-        Resources r = getResources();
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 95, r.getDisplayMetrics());
         Paint p = this.getPaint();
         p.setColor(EMPHASIS_COLOR);
         float leftoffset = 0;
@@ -80,7 +79,7 @@ public class ReaderTextView extends TextView {
 
         //Draw Emphasis
         String emphasis = GetEmphasisString();
-        center = ((this.getWidth() - p.measureText(emphasis))/2) - px/2;
+        center = ((this.getWidth() - p.measureText(emphasis))/2) - padding/2;
         canvas.drawText(emphasis,center,this.getBaseline(),p);
 
         //Draw Rest of current word
@@ -94,21 +93,28 @@ public class ReaderTextView extends TextView {
         rightoffset += p.measureText(emphasis);
         canvas.drawText(wordRight,center + rightoffset, this.getBaseline(),p);
 
-        if (DisplayContext) {
             //Draw Context
             p.setColor(SecondaryColor);
+
             String contextLeft = GetContextLeft();
             String contextRight = GetContextRight();
-            //Draw Left Context
-            leftoffset += p.measureText(contextLeft);
-            canvas.drawText(contextLeft,center - leftoffset,this.getBaseline(),p);
-            //Draw Right Context
-            rightoffset += p.measureText(wordRight);
-            canvas.drawText(contextRight,center + rightoffset,this.getBaseline(),p);
+            if (DisplayContexts[0]) {
+                //Draw Left Context
+                leftoffset += p.measureText(contextLeft);
+                canvas.drawText(contextLeft, center - leftoffset, this.getBaseline(), p);
+            }
+            if (DisplayContexts[1]) {
+                //Draw Right Context
+                rightoffset += p.measureText(wordRight);
+                canvas.drawText(contextRight, center + rightoffset, this.getBaseline(), p);
+            }
             //super.onDraw(canvas);
-        }
     }
 
+    /**
+     * Gets the character in the current word to be marked with emphasis (red)
+     * @return String containing emphasis character
+     */
     private String GetEmphasisString() {
         String word = contents.getWordList().get(pos);
         if (TextUtils.isEmpty(word)){ return ""; }
@@ -117,6 +123,10 @@ public class ReaderTextView extends TextView {
         return wordEmphasis;
     }
 
+    /**
+     * Gets the characters on the left side of the emphasis character
+     * @return String containing left side of the current word
+     */
     private String GetCurrentLeft() {
         String word = contents.getWordList().get(pos);
         if (TextUtils.isEmpty(word)){ return ""; }
@@ -125,6 +135,10 @@ public class ReaderTextView extends TextView {
         return wordLeft;
     }
 
+    /**
+     * Get the characters on the right side of the emphasis character
+     * @return string containing right side of the current word
+     */
     private String GetCurrentRight() {
         String word = contents.getWordList().get(pos);
         if (TextUtils.isEmpty(word)){ return ""; }
@@ -133,11 +147,15 @@ public class ReaderTextView extends TextView {
         return wordRight;
     }
 
+    /**
+     * Gets up to 60 characters that have already been read
+     * @return String containing 60 characters of already read words
+     */
     private String GetContextLeft() {
         int charLen = 0;
         int i = pos;
         StringBuilder format = new StringBuilder();
-        while (charLen < 40 && i > 0){
+        while (charLen < 60 && i > 0){
             String word = contents.getWordList().get(--i);
             if (!TextUtils.isEmpty(word)){
                 charLen += word.length() + 1;
@@ -148,11 +166,15 @@ public class ReaderTextView extends TextView {
         return format.toString();
     }
 
+    /**
+     * Gets up to 60 characters that are soon to be read
+     * @return String containing up to 60 characters of upcoming words
+     */
     private String GetContextRight() {
         int charLen = 0;
         int i = pos;
         StringBuilder format = new StringBuilder(" ");
-        while (charLen < 40 && i < contents.getWordList().size() - 1){
+        while (charLen < 60 && i < contents.getWordList().size() - 1){
             String word = contents.getWordList().get(++i);
             if (!TextUtils.isEmpty(word)){
                 charLen += word.length() + 1;

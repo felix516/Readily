@@ -19,7 +19,6 @@ public class SettingsBundle {
 	private Integer fontSize;
 	private boolean punctuationSpeedDiffers;
 	private List<Integer> delayCoefficients;
-	//private boolean showingContextEnabled;
     private Boolean[] showingContexts;
 	private boolean swipesEnabled;
 	private boolean storingComplete;
@@ -57,10 +56,6 @@ public class SettingsBundle {
 		this.WPM = WPM;
 	}
 
-/*	public boolean isShowingContextEnabled(){
-		return showingContextEnabled;
-	}*/
-
     public Boolean[] getShowingContexts(){
         return showingContexts;
     }
@@ -76,7 +71,6 @@ public class SettingsBundle {
 				sharedPreferences.getString(Constants.Preferences.FONT_SIZE, Constants.DEFAULT_FONT_SIZE));
 		typeface = Integer.parseInt(sharedPreferences.getString(Constants.Preferences.TYPEFACE, "0"));
 		swipesEnabled = sharedPreferences.getBoolean(Constants.Preferences.SWIPE, false);
-		//showingContextEnabled = sharedPreferences.getBoolean(Constants.Preferences.SHOW_CONTEXT, true);
         showingContexts = buildContextList();
 		punctuationSpeedDiffers = sharedPreferences.getBoolean(Constants.Preferences.PUNCTUATION_DIFFERS, true);
 		delayCoefficients = buildDelayListCoefficients();
@@ -117,19 +111,8 @@ public class SettingsBundle {
     private Boolean[] buildContextList(){
 
         Boolean[] returned = new Boolean[2];
-        Set<String> values = sharedPreferences.getStringSet("pref_showContexts",null);
-
-        for (String s : values){
-            switch(s)
-            {
-                case "0":
-                    returned[0] = true;
-                    break;
-                case "1":
-                    returned[1] = true;
-                    break;
-            }
-        }
+        returned[0] = sharedPreferences.getBoolean(Constants.Preferences.CONTEXT_PREPEND,false);
+        returned[1] = sharedPreferences.getBoolean(Constants.Preferences.CONTEXT_APPEND,false);
         return  returned;
     }
 }

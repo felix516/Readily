@@ -176,7 +176,6 @@ public class SettingsActivity extends PreferenceActivity {
 		final EditText editText = new EditText(context);
 		editText.setText(Integer.toString(currentFontSize));
 		editText.setHint(R.string.hint_font_size);
-
 		final LinearLayout linearLayout = getDialogLayout(context);
 		final TextView sampleText = getIndicatorText(context, currentFontSize);
 		linearLayout.addView(sampleText);
@@ -327,14 +326,25 @@ public class SettingsActivity extends PreferenceActivity {
 
 	}
 
+    /**
+     * Displays a Dialogue that allows a user to select whether to show previously read or upcoming words
+     * @param context Application Context
+     */
     private void showContextTextBoxes(final Context context){
 
-        final Boolean[] results = new Boolean[2];
         final LinearLayout linearLayout = getDialogLayout(context);
+
         final CheckBox prependCheckBox = new CheckBox(context);
-        prependCheckBox.setText("Before");
+
+        prependCheckBox.setText(R.string.previous_words);
+        prependCheckBox.setChecked(PreferenceManager.getDefaultSharedPreferences(context)
+                                                    .getBoolean(Constants.Preferences.CONTEXT_PREPEND,false));
+
         final CheckBox appendCheckBox = new CheckBox(context);
-        appendCheckBox.setText("After");
+        appendCheckBox.setText(R.string.next_words);
+        appendCheckBox.setChecked(PreferenceManager.getDefaultSharedPreferences(context)
+                                                    .getBoolean(Constants.Preferences.CONTEXT_APPEND,false));
+
         linearLayout.addView(prependCheckBox);
         linearLayout.addView(appendCheckBox);
 

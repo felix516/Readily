@@ -40,7 +40,6 @@ public class ReaderFragment extends Fragment {
 	private static final float POINTER_LEFT_PADDING_COEFFICIENT = 5f / 18f; //some magic number
 	private static final String[] LIGHT_COLOR_SET = new String[]{"#0A0A0A", "#AAAAAA"};
 	private static final String[] DARK_COLOR_SET = new String[]{"#FFFFFF", "#999999", "#FF282828"};
-	private static final String EMPHASIS_CHAR_COLOR = "#FA2828";
 
 	private ReaderListener callback;
 	//initialized in onCreate()
@@ -55,8 +54,6 @@ public class ReaderFragment extends Fragment {
 	private TextView wpmTextView;
 	private TextView positionTextView;
 	private ReaderTextView currentTextView;
-/*	private TextView leftTextView;
-	private TextView rightTextView;*/
 	private TextView notification;
 	private ProgressBar progressBar;
 	private ProgressBar parsingProgressBar;
@@ -134,70 +131,6 @@ public class ReaderFragment extends Fragment {
 		this.localTime = localTime;
 	}
 
-/*	*//**
-	 * Generates formatted text before emphasis point
-	 * @param pos : position in wordList
-	 * @return Spanned object to draw
-	 *//*
-	private Spanned getFormattedLeft(int pos){
-		if (TextUtils.isEmpty(wordList.get(pos)))
-			return Html.fromHtml("");
-		int emphasisPosition = emphasisList.get(pos);
-		return Html.fromHtml("<font color='" + primaryTextColor + "'>" +
-									 wordList.get(pos).substring(0, emphasisPosition) + "</font>");
-	}*/
-
-/*	*//**
-	 * Generates formatted emphasis character
-	 * @param pos : position in wordList
-	 * @return Spanned object to draw
-	 *//*
-	private Spanned getFormattedEmphasis(int pos){
-		if (TextUtils.isEmpty(wordList.get(pos)))
-			return Html.fromHtml("");
-		int emphasisPosition = emphasisList.get(pos);
-		return Html.fromHtml("<font color='" + EMPHASIS_CHAR_COLOR + "'>" +
-									 wordList.get(pos).substring(emphasisPosition, emphasisPosition + 1) + "</font>");
-	}
-
-	*//**
-	 * Generates formatted text after emphasis character
-	 * (part of current word, if exists and next ones, if option is enabled)
-	 * @param pos : position in wordList
-	 * @return Spanned object to draw
-	 *//*
-	private Spanned getFormattedRight(int pos){
-		if (TextUtils.isEmpty(wordList.get(pos)))
-			return Html.fromHtml("");
-		int emphasisPosition = emphasisList.get(pos);
-		StringBuilder format = new StringBuilder("<font><font color='" + primaryTextColor + "'>" +
-					wordList.get(pos).substring(emphasisPosition + 1, wordList.get(pos).length()) + "</font>");
-		if (settingsBundle.isShowingContextEnabled())
-			format.append(getNextWordsFormat(pos));
-		format.append("</font>");
-		return Html.fromHtml(format.toString());
-	}
-
-	*//**
-	 * Generates Html formatted String of next words in text (called if 'context' option is enabled)
-	 * @param pos : position in wordList
-	 * @return Html format String
-	 *//*
-	private String getNextWordsFormat(int pos){
-		int charLen = 0;
-		int wordListIndex = pos;
-		StringBuilder format = new StringBuilder("&nbsp;<font color='" + secondaryTextColor + "'>");
-		while (charLen < 40 && wordListIndex < wordList.size() - 1){
-			String word = wordList.get(++wordListIndex);
-			if (!TextUtils.isEmpty(word)){
-				charLen += word.length() + 1;
-				format.append(word).append(" ");
-			}
-		}
-		format.append("</font>");
-		return format.toString();
-	}*/
-
 	/**
 	 * Finds all Views in main Fragment ViewGroup
 	 * @param v ViewGroup in which views are found
@@ -206,8 +139,6 @@ public class ReaderFragment extends Fragment {
 		readerLayout = (RelativeLayout) v.findViewById(R.id.reader_layout);
 		parsingProgressBar = (ProgressBar) v.findViewById(R.id.parsingProgressBar);
 		currentTextView = (ReaderTextView) v.findViewById(R.id.currentWordTextView);
-/*		leftTextView = (TextView) v.findViewById(R.id.leftWordTextView);
-		rightTextView = (TextView) v.findViewById(R.id.rightWordTextView);*/
 		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		notification = (TextView) v.findViewById(R.id.reader_notification);
 		prevButton = (ImageButton) v.findViewById(R.id.previousWordImageButton);
@@ -301,8 +232,8 @@ public class ReaderFragment extends Fragment {
 	private void setReaderBackground(){
 		if (settingsBundle.isDarkTheme()){
 			((View) readerLayout.getParent()).setBackgroundColor(Color.parseColor(DARK_COLOR_SET[2]));
-			primaryTextColor = DARK_COLOR_SET[0];
-			secondaryTextColor = DARK_COLOR_SET[1];
+			currentTextView.setPrimaryColor(DARK_COLOR_SET[0]);
+			currentTextView.setSecondaryColor(DARK_COLOR_SET[1]);
 			((ImageView) readerLayout.findViewById(R.id.pointerTopImageView)).
 					setImageResource(R.drawable.word_pointer_dark);
 			((ImageView) readerLayout.findViewById(R.id.pointerBottomImageView)).
@@ -484,7 +415,7 @@ public class ReaderFragment extends Fragment {
 
 		readable = parser.getReadable();
         currentTextView.setContents(readable);
-        currentTextView.setDisplayContext(true);
+        currentTextView.setDisplayContext(settingsBundle.getShowingContexts());
 		wordList = readable.getWordList();
 		emphasisList = readable.getEmphasisList();
 		delayList = readable.getDelayList();

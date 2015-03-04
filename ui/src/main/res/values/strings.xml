@@ -9,6 +9,7 @@
 
     <!-- UI -->
     <string name="just_sample">Sample</string>
+    <string name="previous_words">previous words</string>
     <string name="next_words">next words</string>
     <string name="top_pointer_description">points to emphasis from top</string>
     <string name="bottom_pointer_description">points to emphasis from bottom</string>

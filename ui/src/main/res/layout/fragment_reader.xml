@@ -83,27 +83,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/previousWordImageButton"
                 android:background="@android:color/transparent"
                 android:visibility="gone">
 
-            <TextView
-                    style="@style/reader_text_main"
-                    android:id="@+id/currentWordTextView"
-                    android:layout_alignLeft="@+id/pointerTopImageView"/>
-
-            <TextView
-                    style="@style/reader_text_main"
-                    android:id="@+id/leftWordTextView"
-                    android:layout_alignBaseline="@+id/currentWordTextView"
-                    android:layout_toLeftOf="@+id/currentWordTextView"/>
-
-            <TextView
-                    style="@style/reader_text_main"
-                    android:id="@+id/rightWordTextView"
-                    android:layout_alignBaseline="@+id/currentWordTextView"
-                    android:layout_toRightOf="@+id/currentWordTextView"/>
+            <com.infmme.readilyapp.ReaderTextView
+                style="@style/reader_text_main"
+                android:id="@+id/currentWordTextView"/>
 
             <ImageView
                     style="@style/reader_pointer"
