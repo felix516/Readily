@@ -232,13 +232,15 @@ public class ReaderFragment extends Fragment {
 	private void setReaderBackground(){
 		if (settingsBundle.isDarkTheme()){
 			((View) readerLayout.getParent()).setBackgroundColor(Color.parseColor(DARK_COLOR_SET[2]));
-			currentTextView.setPrimaryColor(DARK_COLOR_SET[0]);
-			currentTextView.setSecondaryColor(DARK_COLOR_SET[1]);
+			primaryTextColor = DARK_COLOR_SET[0];
+            secondaryTextColor = DARK_COLOR_SET[1];
 			((ImageView) readerLayout.findViewById(R.id.pointerTopImageView)).
 					setImageResource(R.drawable.word_pointer_dark);
 			((ImageView) readerLayout.findViewById(R.id.pointerBottomImageView)).
 					setImageResource(R.drawable.word_pointer_dark);
 		}
+        currentTextView.setPrimaryColor(primaryTextColor);
+        currentTextView.setSecondaryColor(secondaryTextColor);
 	}
 
 	private void showNotification(String text){
