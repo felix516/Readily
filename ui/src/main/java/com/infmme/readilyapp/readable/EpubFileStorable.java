@@ -3,6 +3,8 @@ package com.infmme.readilyapp.readable;
 import android.content.Context;
 import android.text.TextUtils;
 import com.infmme.readilyapp.Constants;
+import com.infmme.readilyapp.navigation.TableOfContents;
+
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubReader;
@@ -32,6 +34,7 @@ public class EpubFileStorable extends FileStorable {
 		super(that);
 		type = TYPE_EPUB;
 		book = that.getBook();
+        TableOfContents contents = new TableOfContents(book);
 		List<Resource> oldResources = that.getResources();
 		int oldIndex = that.getIndex();
 		resources = oldResources.subList(oldIndex, oldResources.size());

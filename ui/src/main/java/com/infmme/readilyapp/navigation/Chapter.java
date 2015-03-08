@@ -9,5 +9,22 @@ public class Chapter {
     private int byteStart;
     //Which word the chapter ends on;
     private int byteEnd;
+    //Title of Chapter
+    private String title;
 
+    public Chapter(String title) {
+        this.title = title;
+    }
+
+    public int getByteStart() {
+        return byteStart;
+    }
+
+    public int getByteEnd() {
+        return byteEnd;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }
