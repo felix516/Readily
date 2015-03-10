@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.siegmann.epublib.domain.Book;
+import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.TOCReference;
 
 /**
@@ -29,6 +30,17 @@ public class TableOfContents {
     private void buildTOC() {
 
     }
+
+    public static int getItemIndex(List<Resource> resources, String href){
+
+        for (int i = 0; i < resources.size(); i++) {
+            if (resources.get(i).getHref().equals(href)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
 
 }

@@ -68,6 +68,7 @@ public class EpubFileStorable extends FileStorable {
 			resources = book.getContents();
 
 			createRowData(context);
+            //seekTo(7);
 			if (bytePosition > 0){
 				long passed = 0;
 				while (index < resources.size() && passed < bytePosition)
@@ -78,6 +79,15 @@ public class EpubFileStorable extends FileStorable {
 			e.printStackTrace();
 		}
 	}
+
+    public void seekTo(int index) {
+       this.index = index;
+        this.position = 0;
+        this.bytePosition = 0;
+        for (int i = 0; i < index; i++) {
+            this.bytePosition += resources.get(i).getSize();
+        }
+    }
 
 	@Override
 	public void readData(){
@@ -110,6 +120,7 @@ public class EpubFileStorable extends FileStorable {
 		try {
 			Document doc = Jsoup.parse(text);
 			if (TextUtils.isEmpty(header)){ header = doc.select("book-title").text(); }
+            //return doc.select("#pgepubid00006 ~ p").text();
 			return doc.select("p").text();
 		} catch (Exception e) {
 			e.printStackTrace();

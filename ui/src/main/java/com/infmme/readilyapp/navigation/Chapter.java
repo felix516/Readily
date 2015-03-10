@@ -12,19 +12,38 @@ public class Chapter {
     //Title of Chapter
     private String title;
 
-    public Chapter(String title) {
+    private String href;
+    private String fragmentId;
+
+
+    public Chapter(String title, String href, String fragmentId) {
         this.title = title;
+        this.href = href;
+
+        this.fragmentId = fragmentId;
+    }
+
+
+    public String getHref() {
+        return href;
+    }
+
+    public String getFragmentId() {
+        return fragmentId;
     }
 
     public int getByteStart() {
+
         return byteStart;
     }
 
     public int getByteEnd() {
+
         return byteEnd;
     }
 
     public String getTitle() {
+
         return title;
     }
 }
