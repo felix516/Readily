@@ -19,6 +19,10 @@ public class Section {
     private ArrayList<Chapter> chapters = new ArrayList<Chapter>();
     private ArrayList<Section> subSections = new ArrayList<Section>();
 
+    public String getTitle() {
+        return title;
+    }
+
     public Section(TOCReference reference) {
         this.title = reference.getTitle();
         FillSection(reference);

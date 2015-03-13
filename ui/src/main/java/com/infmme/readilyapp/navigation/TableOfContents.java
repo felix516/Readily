@@ -13,13 +13,33 @@ import nl.siegmann.epublib.domain.TOCReference;
  */
 public class TableOfContents {
 
+    private String title;
+    private String filepath;
     private ArrayList<Section> sections = new ArrayList<Section>();
+    private Book data;
 
-    public TableOfContents(Book data) {
-        buildTOC(data);
+
+    public TableOfContents(Book data , String filepath) {
+
+        this.filepath = filepath;
+        this.data = data;
+        buildTOC();
     }
 
-    private void buildTOC(Book data) {
+    public String getTitle() {
+        return title;
+    }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public ArrayList<Section> getSections() {
+        return sections;
+    }
+
+    private void buildTOC() {
+        this.title = data.getTitle();
         List<TOCReference> referenceList = data.getTableOfContents().getTocReferences();
 
         for (TOCReference r : referenceList) {
@@ -27,14 +47,12 @@ public class TableOfContents {
         }
     }
 
-    private void buildTOC() {
 
-    }
+    public  int getItemIndex(String href){
 
-    public static int getItemIndex(List<Resource> resources, String href){
-
-        for (int i = 0; i < resources.size(); i++) {
-            if (resources.get(i).getHref().equals(href)) {
+        List<Resource> resourceList = data.getContents();
+        for (int i = 0; i < resourceList.size(); i++) {
+            if (resourceList.get(i).getHref().equals(href)) {
                 return i;
             }
         }

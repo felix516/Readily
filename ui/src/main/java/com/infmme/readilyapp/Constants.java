@@ -13,6 +13,8 @@ public class Constants {
 	public static final String EXTRA_HEADER = "header";
 	public static final String EXTRA_PERCENT = "percent_left";
 	public static final String EXTRA_DB_OPERATION = "db_operation";
+    public static final String EXTRA_INDEX = "epub_index";
+    public static final String EXTRA_ID = "id";
 
 	public static final String DEFAULT_WPM = "250";
 	public static final String DEFAULT_FONT_SIZE = "18";

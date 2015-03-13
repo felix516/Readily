@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
@@ -18,9 +19,16 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.infmme.readilyapp.Constants;
 import com.infmme.readilyapp.R;
 import com.infmme.readilyapp.ReceiverActivity;
+import com.infmme.readilyapp.navigation.ExpandableTocAdapter;
+import com.infmme.readilyapp.navigation.TableOfContents;
 import com.infmme.readilyapp.readable.MiniReadable;
 import com.infmme.readilyapp.readable.Storable;
 import com.infmme.readilyapp.service.LastReadService;
+
+import java.io.IOException;
+
+import nl.siegmann.epublib.domain.Book;
+import nl.siegmann.epublib.epub.EpubReader;
 
 public class CachedFilesAdapter extends SimpleCursorAdapter {
 
@@ -103,6 +111,13 @@ public class CachedFilesAdapter extends SimpleCursorAdapter {
 							hideActionView();
 						}
 					});
+                    (view.findViewById(R.id.imageViewtoc)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v){
+                            buildTocDialog(context, readable);
+                            hideActionView();
+                        }
+                    });
 					return true;
 				}
 				return false;
@@ -228,4 +243,24 @@ public class CachedFilesAdapter extends SimpleCursorAdapter {
 				setText(readable.getPercent());
 		return view;
 	}
+
+    private void buildTocDialog(Context context, final MiniReadable readable) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context).
+                setTitle("Table of Contents");
+        AlertDialog tocDialog = builder.create();
+        tocDialog.setView(createTocView(context,readable,tocDialog));
+        tocDialog.show();
+    }
+
+    private View createTocView(Context context, final MiniReadable readable,AlertDialog parent) {
+
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_toc, null);
+        try {
+            Book book = (new EpubReader()).readEpubLazy(readable.getPath(), "UTF-8");
+            ((ExpandableListView) view.findViewById(R.id.toc_list)).setAdapter(new ExpandableTocAdapter(context, new TableOfContents(book,readable.getPath()),parent));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return view;
+    }
 }

@@ -34,7 +34,7 @@ public class EpubFileStorable extends FileStorable {
 		super(that);
 		type = TYPE_EPUB;
 		book = that.getBook();
-        TableOfContents contents = new TableOfContents(book);
+        TableOfContents contents = new TableOfContents(book,that.getPath());
 		List<Resource> oldResources = that.getResources();
 		int oldIndex = that.getIndex();
 		resources = oldResources.subList(oldIndex, oldResources.size());

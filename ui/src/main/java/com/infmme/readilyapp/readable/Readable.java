@@ -77,6 +77,9 @@ abstract public class Readable implements Serializable {
 					PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.Preferences.STORAGE,
 																					  true));
 			readable.setPosition(Math.max(bundle.getInt(Constants.EXTRA_POSITION), 0));
+            if (readable instanceof EpubFileStorable) {
+                ((EpubFileStorable) readable).seekTo(bundle.getInt(Constants.EXTRA_INDEX));
+            }
 			readable.setHeader(bundle.getString(Constants.EXTRA_HEADER));
 		}
 		return readable;
