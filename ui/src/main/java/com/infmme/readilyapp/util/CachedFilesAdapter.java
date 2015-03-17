@@ -71,6 +71,7 @@ public class CachedFilesAdapter extends SimpleCursorAdapter {
 					args.putInt(Constants.EXTRA_TYPE, Storable.TYPE_FILE);
 					args.putString(Constants.EXTRA_PATH, path);
 					args.putString(Constants.EXTRA_HEADER, textViewTitle.getText().toString());
+                    args.putSerializable(Constants.EXTRA_RESUME_STATUS, Constants.RESUME_STATUS.RESUME);
 					ReceiverActivity.startReceiverActivity(context, args);
 				}
 			}

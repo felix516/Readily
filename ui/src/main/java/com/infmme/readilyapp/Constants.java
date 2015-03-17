@@ -15,6 +15,7 @@ public class Constants {
 	public static final String EXTRA_DB_OPERATION = "db_operation";
     public static final String EXTRA_INDEX = "epub_index";
     public static final String EXTRA_ID = "id";
+    public static final String EXTRA_RESUME_STATUS = "resume_status";
 
 	public static final String DEFAULT_WPM = "250";
 	public static final String DEFAULT_FONT_SIZE = "18";
@@ -26,6 +27,7 @@ public class Constants {
 	public static final int DIALOG_PICKER_HEIGHT = 300;
 	public static final int MIN_FONT_SIZE = 12;
 	public static final int MAX_FONT_SIZE = 30;
+    public static enum RESUME_STATUS {NEW, RESUME, SEEK };
 
 	//defines a length, which limits links with description(to reduce working time of regexp)
 	public static final int NON_LINK_LENGTH = 500;

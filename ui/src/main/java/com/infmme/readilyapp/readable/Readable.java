@@ -78,7 +78,8 @@ abstract public class Readable implements Serializable {
 																					  true));
 			readable.setPosition(Math.max(bundle.getInt(Constants.EXTRA_POSITION), 0));
             if (readable instanceof EpubFileStorable) {
-                ((EpubFileStorable) readable).seekTo(bundle.getInt(Constants.EXTRA_INDEX));
+                ((EpubFileStorable) readable).setTargetId(bundle.getString(Constants.EXTRA_ID));
+                ((EpubFileStorable) readable).setTargetIndex(bundle.getInt(Constants.EXTRA_INDEX,-1));
             }
 			readable.setHeader(bundle.getString(Constants.EXTRA_HEADER));
 		}

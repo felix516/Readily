@@ -8,6 +8,8 @@ import com.infmme.readilyapp.navigation.TableOfContents;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubReader;
+import nl.siegmann.epublib.util.StringUtil;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -23,7 +25,10 @@ public class EpubFileStorable extends FileStorable {
 	private Book book;
 	private List<Resource> resources;
 	private int index;
-	public static final int BUFFER_SIZE = 1024; //epubs are larger, so buffer should be smaller
+    private int targetIndex;
+    private String targetId;
+
+    public static final int BUFFER_SIZE = 1024; //epubs are larger, so buffer should be smaller
 
 	public EpubFileStorable(String path){
 		type = TYPE_EPUB;
@@ -68,7 +73,7 @@ public class EpubFileStorable extends FileStorable {
 			resources = book.getContents();
 
 			createRowData(context);
-            //seekTo(7);
+            seekTo(targetIndex);
 			if (bytePosition > 0){
 				long passed = 0;
 				while (index < resources.size() && passed < bytePosition)
@@ -80,16 +85,26 @@ public class EpubFileStorable extends FileStorable {
 		}
 	}
 
-    public void seekTo(int index) {
-       this.index = index;
-        this.position = 0;
-        this.bytePosition = 0;
-        for (int i = 0; i < index; i++) {
-            this.bytePosition += resources.get(i).getSize();
-        }
+    public void setTargetIndex(int index) {
+        this.targetIndex = index;
     }
 
-	@Override
+    public void seekTo(int index) {
+       if (index != -1) {
+           //this.index = index;
+           this.position = 0;
+           this.bytePosition = 0;
+           for (int i = 0; i < index; i++) {
+                this.bytePosition += resources.get(i).getSize();
+           }
+       }
+    }
+
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
+    }
+
+    @Override
 	public void readData(){
 		int cycleCount = 0;
 		while (cycleCount < 5){
@@ -104,6 +119,9 @@ public class EpubFileStorable extends FileStorable {
 				e.printStackTrace();
 			}
 			text = new StringBuilder(parseEpub(text.toString()));
+            if (!text.toString().isEmpty()) {
+                targetId = "";
+            }
 			if (index >= resources.size() || (!TextUtils.isEmpty(text) && doesHaveLetters(text))){
 				break;
 			}
@@ -121,7 +139,13 @@ public class EpubFileStorable extends FileStorable {
 			Document doc = Jsoup.parse(text);
 			if (TextUtils.isEmpty(header)){ header = doc.select("book-title").text(); }
             //return doc.select("#pgepubid00006 ~ p").text();
-			return doc.select("p").text();
+            if (!TextUtils.isEmpty(targetId))
+            {
+                return doc.select("#" + targetId + "~p").text();
+            }
+            else {
+                return doc.select("p").text();
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

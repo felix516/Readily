@@ -120,6 +120,7 @@ public class ExpandableTocAdapter extends BaseExpandableListAdapter {
                 args.putString(Constants.EXTRA_HEADER, items.getTitle());
                 args.putInt(Constants.EXTRA_INDEX,items.getItemIndex(chapter.getHref()));
                 args.putString(Constants.EXTRA_ID,chapter.getFragmentId());
+                args.putSerializable(Constants.EXTRA_RESUME_STATUS,Constants.RESUME_STATUS.SEEK);
                 ReceiverActivity.startReceiverActivity(context, args);
                 parentView.dismiss();
             }

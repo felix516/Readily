@@ -38,11 +38,11 @@ public class Section {
             //If the item only has one child, assume chapter # + title
             else if (r.getChildren().size() == 1) {
                 chapters.add(new Chapter(r.getTitle() + " - " + r.getChildren().get(0).getTitle(),
-                        r.getCompleteHref(),r.getFragmentId()));
+                        r.getResource().getHref(),r.getFragmentId()));
             }
             //Otherwise create a Chapter
             else {
-                chapters.add(new Chapter(r.getTitle(),r.getCompleteHref(),r.getFragmentId()));
+                chapters.add(new Chapter(r.getTitle(),r.getResource().getHref(),r.getFragmentId()));
             }
         }
     }
