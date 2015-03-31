@@ -1,28 +1,25 @@
 package com.infmme.readilyapp.navigation;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.infmme.readilyapp.Constants;
 import com.infmme.readilyapp.R;
 import com.infmme.readilyapp.ReceiverActivity;
-import com.infmme.readilyapp.readable.MiniReadable;
 import com.infmme.readilyapp.readable.Storable;
 
 /**
  * Created by Dylan on 3/10/2015.
  */
-public class ExpandableTocAdapter extends BaseExpandableListAdapter {
+public class ExpandableTocAdapter extends BaseExpandableListAdapter implements ExpandableListView.OnChildClickListener {
 
     private Context context;
     private TableOfContents items;
@@ -109,23 +106,6 @@ public class ExpandableTocAdapter extends BaseExpandableListAdapter {
         }
 
         TextView item = (TextView) convertView.findViewById(R.id.chapter);
-
-        //When a chapter is selected, create a new ReaderFragment that starts at that chapter
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle args = new Bundle();
-                args.putInt(Constants.EXTRA_TYPE, Storable.TYPE_FILE);
-                args.putString(Constants.EXTRA_PATH, items.getFilepath());
-                args.putString(Constants.EXTRA_HEADER, items.getTitle());
-                args.putInt(Constants.EXTRA_INDEX,items.getItemIndex(chapter.getHref()));
-                args.putString(Constants.EXTRA_ID,chapter.getFragmentId());
-                args.putSerializable(Constants.EXTRA_RESUME_STATUS,Constants.RESUME_STATUS.SEEK);
-                ReceiverActivity.startReceiverActivity(context, args);
-                parentView.dismiss();
-            }
-        });
-
         item.setText("\u2022 " + chapter.getTitle());
 
         return convertView;
@@ -134,5 +114,20 @@ public class ExpandableTocAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        final Chapter chapter = (Chapter)getChild(groupPosition,childPosition);
+        Bundle args = new Bundle();
+        args.putInt(Constants.EXTRA_TYPE, Storable.TYPE_FILE);
+        args.putString(Constants.EXTRA_PATH, items.getFilepath());
+        args.putString(Constants.EXTRA_HEADER, items.getTitle());
+        args.putInt(Constants.EXTRA_INDEX,items.getItemIndex(chapter.getHref()));
+        args.putString(Constants.EXTRA_ID,chapter.getFragmentId());
+        args.putSerializable(Constants.EXTRA_RESUME_STATUS,Constants.RESUME_STATUS.SEEK);
+        ReceiverActivity.startReceiverActivity(context, args);
+        parentView.dismiss();
+        return false;
     }
 }

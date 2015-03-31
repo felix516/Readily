@@ -258,7 +258,11 @@ public class CachedFilesAdapter extends SimpleCursorAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_toc, null);
         try {
             Book book = (new EpubReader()).readEpubLazy(readable.getPath(), "UTF-8");
-            ((ExpandableListView) view.findViewById(R.id.toc_list)).setAdapter(new ExpandableTocAdapter(context, new TableOfContents(book,readable.getPath()),parent));
+            ExpandableListView exView = (ExpandableListView)view.findViewById(R.id.toc_list);
+            ExpandableTocAdapter TocAdapter = new ExpandableTocAdapter(context, new TableOfContents(book,readable.getPath()),parent);
+            exView.setAdapter(TocAdapter);
+            exView.setOnChildClickListener(TocAdapter);
+            //((ExpandableListView) view.findViewById(R.id.toc_list)).setAdapter(new ExpandableTocAdapter(context, new TableOfContents(book,readable.getPath()),parent));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -121,6 +121,7 @@ public class EpubFileStorable extends FileStorable {
 			text = new StringBuilder(parseEpub(text.toString()));
             if (!text.toString().isEmpty()) {
                 targetId = "";
+                targetIndex = -1;
             }
 			if (index >= resources.size() || (!TextUtils.isEmpty(text) && doesHaveLetters(text))){
 				break;
